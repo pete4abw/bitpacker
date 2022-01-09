@@ -1,0 +1,60 @@
+ASCII Bit Packer/Unpacker
+=========================
+7-bit ASCII will be packed into a array of 7 bit bytes
+
+For each byte, shift left and then move bit 6 or more from next byte
+at each byte, move one more bit to above.
+7 6 5 4 3 2 1 0
+===============
+0 1 1 1 1 1 1 1
+0 2 2 2 2 2 2 2
+becomes
+1 1 1 1 1 1 1 2 -> bit 6 from byte 2
+2 2 2 2 2 2 3 3 -> bit 6 and 5 from byte 3
+3 3 3 3 3 4 4 4 -> bit 6, 5, and 4 from byte 4
+...
+6 6 7 7 7 7 7 7 -> bit 6, 5...1 from byte 7 
+7 8 8 8 8 8 8 8 -> bit 0 from byte 7 and bits 6..0 from byte 8
+
+so that 8 7-bit bytes becomes 7 8-bit bytes.
+
+Uncompress works the opposite.
+Strip 1-6 bits and save from bitpacked byte
+Shift remaining bits over and paste saved bits
+7 6 5 4 3 2 1 0
+===============
+1 1 1 1 1 1 1 2 -> save byte 1 bit 0 for byte 2 which is bit 6
+0 1 1 1 1 1 1 1 -> restore byte 1 by shifting right
+2 2 2 2 2 2 3 3 -> save bits 0 and 1 for byte 3 which will be bits 5 and 6
+  ! 2 2 2 2 2 2 -> shift over byte 2 and paste saved bit 6
+0 2             -> to complete byte 2
+3 3 3 3 3 4 4 4 -> save bits 0-2 for byte 4
+  ! ! 3 3 3 3 3 -> shift over byte 3 and paste saved bits 5 and 6
+...
+6 6 7 7 7 7 7 7 -> save bits 0-5 for byte 7
+  ! ! ! ! ! 6 6 -> paste saved bits for byte 6
+7 8 8 8 8 8 8 8 -> byte 7 contains an unshifted byte 8. Save it. It also
+                   has bit 0 for byte 7 in bit 7
+  ! ! ! ! ! ! 7 -> paste saved bits for byte 7
+byte 8 is unpacked.
+so that 7 8-bit bytes becomes 8 7-bit bytes.
+
+this works for any number of bytes but will only save byte space
+if 8 or more bytes are packed. 
+ 
+While not encryption by any standard, it will obscure data stored because of
+the bit shifting.
+
+Functions
+---------
+unsigned char * abitpack( const unsigned char * input)		// Pack an array of bytes
+unsigned char * abitunpack( const unsigned char * input)	// Unpack an array of bytes
+
+Both functions return a pointer to packed/unpacked byte stream.
+If any byte to be packed is 8 bits, NULL is returned.
+If any other error occurs, NULL is returned.
+
+Peter Hyman
+January 2022
+pete@peterhyman.com
+

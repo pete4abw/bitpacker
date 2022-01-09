@@ -1,0 +1,6 @@
+TODO
+
+Make demo program more robust, like having stream input,
+file input/output, more useful formatting.
+
+Add other types of packing, ints, longs, doubles, etc.
