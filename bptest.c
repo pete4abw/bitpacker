@@ -26,7 +26,7 @@ int main (int argc, char *argv[])
 {
 	BYTE *in = (BYTE *) argv[1];
 	BYTE *pack, *unpack;
-	int i,j,il,pl;
+	int i,j,il,pl,ul;
 
 	if (argc != 2)
 	{
@@ -35,10 +35,23 @@ int main (int argc, char *argv[])
 	}
 	il=strlen((char *)in);
 	pack = abitpack(in);
+	if (!pack)			/* somoething wrong */
+	{
+		fprintf(stderr, "An error occurred during abitpack. Aborting\n");
+		return 1;
+	}
 	pl = strlen((char *)pack);
 	unpack = abitunpack(pack);	/* should be same as input length */
-	printf("Input length is: %d\nOutput length is: %d\n", il, pl);
+	if (!unpack)			/* somoething wrong */
+	{
+		fprintf(stderr, "An error occurred during abitunpack. Aborting\n");
+		return 1;
+	}
+	ul = strlen((char *)unpack);
+	printf("Input length is:  %3d\nOutput length is: %3d\nUnpack length is: %3d %s\n\n", il, pl, ul, ul != il ? "Warning Unpack Length different!" : "");
 
+	printf("Char: 7 6 5 4 3 2 1 0     Char: 7 6 5 4 3 2 1 0     Char: 7 6 5 4 3 2 1 0\n");
+	printf("---------------------     ---------------------     ---------------------\n");
 	for ( i  =  0; i < il; i++)
 	{
 		printf("%1c %02X: ", PRINTABLE(in[i]), in[i]);
