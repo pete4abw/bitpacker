@@ -54,6 +54,23 @@ Both functions return a pointer to packed/unpacked byte stream.
 If any byte to be packed is 8 bits, NULL is returned.
 If any other error occurs, NULL is returned.
 
+Make and Run
+============
+Makefile will compile a shared library libbitpacker.so.
+Makefile will link the libbitpacker.so into sample program, bptest.
+To run in place, set LD_LIBRARY_PATH=$PWD
+
+$ make
+$ export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
+$ ./bptest "string to pack"
+
+bptest will also output a file called test.pack which will hold bitpacked
+output.
+
+To remove compiled files
+========================
+$ make clean
+
 Peter Hyman
 January 2022
 pete@peterhyman.com
