@@ -14,6 +14,11 @@
  * Copyright 2022 Peter Hyman, pete@peterhyman.com
  */
 
+#define BPEOK    0	/* all OK */
+#define BPENOIN  1	/* No input provided */
+#define BPE8BIT  2	/* 8 bit ASCII detected */
+#define BPENOOUT 3	/* this is very bad! */
+
 typedef unsigned char	BYTE;
 
 /* Pack 7-bit ASCII string

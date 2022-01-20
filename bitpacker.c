@@ -25,6 +25,12 @@
 #define SHR(p,n)	(p >> n)
 #define MASKBITS(p,n)	(!n ? p & 1 : p & ((2 << n) - 1))
 
+int bperr;		/* global error */
+char *bperrstr[]={"bitpacker: OK", 
+	"bitpacker: No Input to (un)pack", 
+	"bitpacker: Input not 7 bit ASCII", 
+	"bitpacker: FATAL! Cannot allocate ram for (un)pack"};	/* global error strings */
+
 BYTE * abitpack(const BYTE *in)
 {
 	int outpos = 0, inpos = 0, prevbyte = 0, bitpos = 0;
@@ -32,17 +38,32 @@ BYTE * abitpack(const BYTE *in)
 	BYTE *out;
 
 	if (!in)			/* nothing passed */
+	{
+		bperr=BPENOIN;
 		return NULL;
+	}
 
 	length = strlen((char *)in) - 1;	/* 0-based length */
+	if (length <= 0)		/* 0 length or strlen error */
+	{
+		bperr=BPENOIN;
+		return NULL;
+	}
+
 	out=calloc(length+1, 1);	/* allocate output string */
 	if (out == NULL)		/* something very wrong */
+	{
+		bperr=BPENOOUT;
 		return NULL;
+	}
 
 	do
 	{
 		if (in[inpos] & 0b10000000)			/* can't bitpack because high order bit set */
+		{
+			bperr=BPE8BIT;
 			return NULL;
+		}
 
 		out[outpos] = SHL(in[inpos], (bitpos + 1));	/* shift current byte 1-7 bits */
 		if (bitpos > 0)					/* if second or more time through, update prior byte */
@@ -60,6 +81,7 @@ BYTE * abitpack(const BYTE *in)
 		inpos++;
 		bitpos++;
 	} while (inpos <= length);
+	bperr=BPEOK;
 	return (out);
 }
 
@@ -71,9 +93,17 @@ BYTE * abitunpack(const BYTE *in)
 	BYTE *out;
 
 	if (!in)			/* nothing passed */
+	{
+		bperr=BPENOIN;
 		return NULL;
+	}
 
 	length = strlen((char *)in);		/* packed input length */
+	if (length-1 <= 0)		/* 0 length or strlen error */
+	{
+		bperr=BPENOIN;
+		return NULL;
+	}
 	/* to determine outlength for fewer than 8 bytes, we must look at
 	 * the value of byte 7 or its multiples.
 	 * if the value of byte 7, 14, 21, etc. is 0 or not If 0
@@ -91,11 +121,14 @@ BYTE * abitunpack(const BYTE *in)
 			++outlength;
 	}
 	length--;			/* 0-based */
-	outlength--;			/* 0-based */
 
 	out=calloc(outlength, 1);
 	if (!out)			/* something very wrong */
+	{
+		bperr=BPENOOUT;
 		return NULL;
+	}
+	outlength--;			/* 0-based */
 
 	do
 	{
@@ -117,6 +150,6 @@ BYTE * abitunpack(const BYTE *in)
 		inpos++;
 		bitpos++;
 	} while (inpos <= length);
-
+	bperr=BPEOK;
 	return (out);
 }
