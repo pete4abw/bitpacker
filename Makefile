@@ -6,7 +6,7 @@
 .DEFAULT_GOAL := bptest
 
 
-bptest:
+bptest: bptest.c bitpacker.c bitpacker.h
 	gcc -O0 -g -Wall -I./ -fPIC -c bitpacker.c
 	gcc -shared -o libbitpacker.so bitpacker.o
 	gcc -O0 -g -Wall  -I./ -L./ bptest.c  -o bptest -lbitpacker
