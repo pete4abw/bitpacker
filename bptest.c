@@ -22,6 +22,10 @@
 
 #define PRINTABLE(p)	p >= 0x20  && p < 0x7F ? p : 0x20	/* Printable Chars only */
 
+/* defined in bitpacker.c library */
+extern int bperr;		/* bitpacker error code */
+extern char *bperrstr[];	/* bitpacker error strings */
+
 int main (int argc, char *argv[])
 {
 	BYTE *in = (BYTE *) argv[1];
@@ -35,16 +39,18 @@ int main (int argc, char *argv[])
 	}
 	il=strlen((char *)in);
 	pack = abitpack(in);
-	if (!pack)			/* somoething wrong */
+	printf("BPERR=%d, %s\n", bperr, bperrstr[bperr]);
+	if (!pack || bperr)			/* somoething wrong */
 	{
-		fprintf(stderr, "An error occurred during abitpack. Aborting\n");
+		fprintf(stderr, "An error %d occurred during abitpack. %s. Aborting\n", bperr, bperrstr[bperr]);
 		return 1;
 	}
 	pl = strlen((char *)pack);
 	unpack = abitunpack(pack);	/* should be same as input length */
-	if (!unpack)			/* somoething wrong */
+	printf("BPERR=%d, %s\n", bperr, bperrstr[bperr]);
+	if (!unpack || bperr)			/* somoething wrong */
 	{
-		fprintf(stderr, "An error occurred during abitunpack. Aborting\n");
+		fprintf(stderr, "An error %d occurred during abitunpack. %s. Aborting\n", bperr, bperrstr[bperr]);
 		return 1;
 	}
 	ul = strlen((char *)unpack);
