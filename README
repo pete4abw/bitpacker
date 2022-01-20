@@ -51,8 +51,21 @@ unsigned char * abitpack( const unsigned char * input)		// Pack an array of byte
 unsigned char * abitunpack( const unsigned char * input)	// Unpack an array of bytes
 
 Both functions return a pointer to packed/unpacked byte stream.
-If any byte to be packed is 8 bits, NULL is returned.
-If any other error occurs, NULL is returned.
+If input is NULL or 0 bytes long, NULL is returned and bperr is set.
+If any byte to be packed is 8 bits, NULL is returned and bperr is set.
+If any other error occurs, NULL is returned and bperr is set.
+
+Globals
+-------
+int bperr;		/* global error */
+char *bperrstr[]	/* global error strings */
+
+#defines
+--------
+#define BPEOK    0	/* all OK */
+#define BPENOIN  1	/* No input provided */
+#define BPE8BIT  2	/* 8 bit ASCII detected */
+#define BPENOOUT 3	/* this is very bad! */
 
 Make and Run
 ============
