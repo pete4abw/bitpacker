@@ -99,7 +99,7 @@ BYTE * abitunpack(const BYTE *in)
 	}
 
 	length = strlen((char *)in);		/* packed input length */
-	if (length-1 <= 0)		/* 0 length or strlen error */
+	if (length <= 0)			/* 0 length or strlen error */
 	{
 		bperr=BPENOIN;
 		return NULL;
