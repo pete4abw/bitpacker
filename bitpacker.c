@@ -62,6 +62,7 @@ BYTE * abitpack(const BYTE *in)
 		if (in[inpos] & 0b10000000)			/* can't bitpack because high order bit set */
 		{
 			bperr=BPE8BIT;
+			free(out);				/* cleanup */
 			return NULL;
 		}
 
