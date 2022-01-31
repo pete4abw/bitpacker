@@ -43,19 +43,20 @@ BYTE * abitpack(const BYTE *in)
 		return NULL;
 	}
 
-	length = strlen((char *)in) - 1;	/* 0-based length */
+	length = strlen((char *)in);
 	if (length <= 0)		/* 0 length or strlen error */
 	{
 		bperr=BPENOIN;
 		return NULL;
 	}
 
-	out=calloc(length+1, 1);	/* allocate output string */
+	out=calloc(length, 1);		/* allocate output string */
 	if (out == NULL)		/* something very wrong */
 	{
 		bperr=BPENOOUT;
 		return NULL;
 	}
+	length--;			/* make length 0-based */
 
 	do
 	{
@@ -74,7 +75,7 @@ BYTE * abitpack(const BYTE *in)
 		if (bitpos == 6)				/* unless it's the 7th byte or multiple */
 		{
 			if (inpos <= length)
-				out[outpos] |= in[++inpos]; //SHL((in[inpos]),1);
+				out[outpos] |= in[++inpos];
 			bitpos = -1;				/* reset */
 		}
 		prevbyte = outpos;
