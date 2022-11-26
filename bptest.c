@@ -19,6 +19,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdbool.h>
+#include <glib-2.0/glib.h>
 
 #define PRINTABLE(p)	p >= 0x20  && p < 0x7F ? p : 0x20	/* Printable Chars only */
 
@@ -30,6 +31,11 @@ int main (int argc, char *argv[])
 {
 	BYTE *in = (BYTE *) argv[1];
 	BYTE *pack, *unpack;
+	guchar *ibase64;
+	gchar *obase64;
+	gsize b64_decode_len;
+
+
 	int i,j,il,pl,ul;
 
 	if (argc != 2)
@@ -79,6 +85,16 @@ int main (int argc, char *argv[])
 
 		printf("\n");
 	}
+
+	/* now encode into base64 */
+	obase64 = g_base64_encode(pack, pl);
+	printf("base64: %s\n", obase64);
+	ibase64 = g_base64_decode(obase64, &b64_decode_len);
+
+	if (strcmp((char*) ibase64, (char *) pack))
+		printf("Error, base64 decode and pack are not equal\n");
+	else
+		printf("base64 encoding successful\n");
 
 	FILE *fp;
 	fp = fopen("test.pack","w+");

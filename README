@@ -1,6 +1,7 @@
 ASCII Bit Packer/Unpacker
 =========================
 7-bit ASCII will be packed into a array of 7 bit bytes
+base64 encoding of output string
 
 For each byte, shift left and then move bit 6 or more from next byte
 at each byte, move one more bit to above.
@@ -17,6 +18,8 @@ becomes
 7 8 8 8 8 8 8 8 -> bit 0 from byte 7 and bits 6..0 from byte 8
 
 so that 8 7-bit bytes becomes 7 8-bit bytes.
+Output may be unreadable and unprintable
+so base64 encoding can be used
 
 Uncompress works the opposite.
 Strip 1-6 bits and save from bitpacked byte

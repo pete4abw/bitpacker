@@ -31,6 +31,8 @@ Char: 7 6 5 4 3 2 1 0     Char: 7 6 5 4 3 2 1 0     Char: 7 6 5 4 3 2 1 0
 1 31: 0 0 1 1 0 0 0 1       B1: 1 0 1 1 0 0 0 1     1 31: 0 0 1 1 0 0 0 1
 1 31: 0 0 1 1 0 0 0 1     b 62: 0 1 1 0 0 0 1 0     1 31: 0 0 1 1 0 0 0 1
 1 31: 0 0 1 1 0 0 0 1     - --: - - - - - - - -     1 31: 0 0 1 1 0 0 0 1
+base64: YsWLFixYsWI=
+base64 encoding successful
 
 $ ./bptest AAAAAAAAA
 
@@ -49,6 +51,8 @@ A 41: 0 1 0 0 0 0 0 1     ` 60: 0 1 1 0 0 0 0 0     A 41: 0 1 0 0 0 0 0 1
 A 41: 0 1 0 0 0 0 0 1       C1: 1 1 0 0 0 0 0 1     A 41: 0 1 0 0 0 0 0 1
 A 41: 0 1 0 0 0 0 0 1       82: 1 0 0 0 0 0 1 0     A 41: 0 1 0 0 0 0 0 1
 A 41: 0 1 0 0 0 0 0 1     - --: - - - - - - - -     A 41: 0 1 0 0 0 0 0 1
+base64: gwYMGDBgwYI=
+base64 encoding successful
 
 $ ./bptest "The quick brown fox jumped over the lazy dog!"
 
@@ -103,6 +107,8 @@ d 64: 0 1 1 0 0 1 0 0     - --: - - - - - - - -     d 64: 0 1 1 0 0 1 0 0
 o 6F: 0 1 1 0 1 1 1 1     - --: - - - - - - - -     o 6F: 0 1 1 0 1 1 1 1
 g 67: 0 1 1 0 0 1 1 1     - --: - - - - - - - -     g 67: 0 1 1 0 0 1 1 1
 ! 21: 0 0 1 0 0 0 0 1     - --: - - - - - - - -     ! 21: 0 0 1 0 0 0 0 1
+base64: qaMqDj1049aDFy399yDNv8INXXbwy5EG/tl5IOmjKg2YfXlBk350IA==
+base64 encoding successful
 
 Peter Hyman
 Copyright 2022
