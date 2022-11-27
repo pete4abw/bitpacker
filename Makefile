@@ -3,13 +3,26 @@
 
 # will compile a bitpacker shared library and link it to bptest program
 #
-.DEFAULT_GOAL := bptest
 
+GLIB=`pkg-config --cflags --libs glib-2.0`
+
+all: bitpacker.o bptest bitp
+
+bitpacker.o: bitpacker.c bitpacker.h
+	# compile bitpacker library
+	@echo "creating libbitpacker library"
+	gcc -O0 -g -Wall -I./ -fPIC -c bitpacker.c
+	# make into shared library for other uses
+	gcc -shared -o libbitpacker.so bitpacker.o
 
 bptest: bptest.c bitpacker.c bitpacker.h
-	gcc -O0 -g -Wall -I./ -fPIC -c bitpacker.c
-	gcc -shared -o libbitpacker.so bitpacker.o
-	gcc -O0 -g -Wall  `pkg-config --cflags --libs glib-2.0` -I ./ -L ./  bptest.c  -o bptest -lbitpacker
+	# link statically to avoid having to use shared library
+	@echo "creating bptest file"
+	gcc -O0 -g -Wall $(GLIB)  -I ./  bptest.c -o bptest bitpacker.o
+
+bitp: bitp.c bitpacker.c bitpacker.h
+	@echo "creating bitp program"
+	gcc -O0 -g -Wall $(GLIB)  -I ./  bitp.c -o bitp bitpacker.o
 
 clean:
-	rm -v bptest *.o *.so test.pack
+	rm -v bptest bitp *.o *.so test.pack

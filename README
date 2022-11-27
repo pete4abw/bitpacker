@@ -1,7 +1,48 @@
 ASCII Bit Packer/Unpacker
 =========================
 7-bit ASCII will be packed into a array of 7 bit bytes
-base64 encoding of output string
+base64 encoding of output string.
+
+There are two programs:
+1. bptest, which provides detailed proof of packing and unpacking strings
+2. bitp, which is a standalone program to pack and unpack
+
+bptest takes one argument: string to pack or unpack
+bitp takes 2 arguments. p or u to pack or unpack, and a string
+String to unpack must be a base64 encoded string
+
+bitp p password
+bitp u base64 encoded bit-packed password
+
+Example:
+$ ./bitp p password
+Base64 encoding of password is 4YefPvv5ZA==
+
+$ ./bitp u 4YefPvv5ZA==
+base64 Decoded packed password is: password
+
+CAUTION: This is not a secure system, merely a way to obscure
+passwords.
+
+Make and Run
+============
+Makefile will compile a shared library libbitpacker.so.
+Makefile will link the libbitpacker.so into sample programs, bptest and bitp.
+The libbitpacker.so file can be used by other programs.
+
+$ make
+$ ./bptest "string to pack"
+$ ./bitp p|u "string to pack/unpack"
+
+bptest will also output a file called test.pack which will hold bitpacked
+output.
+
+To remove compiled files
+========================
+$ make clean
+
+DISCUSSION
+==========
 
 For each byte, shift left and then move bit 6 or more from next byte
 at each byte, move one more bit to above.
@@ -46,7 +87,7 @@ this works for any number of bytes but will only save byte space
 if 8 or more bytes are packed. 
  
 While not encryption by any standard, it will obscure data stored because of
-the bit shifting.
+the bit shifting. Base64 encoding can further obscure the original password.
 
 Functions
 ---------
@@ -70,24 +111,8 @@ char *bperrstr[]	/* global error strings */
 #define BPE8BIT  2	/* 8 bit ASCII detected */
 #define BPENOOUT 3	/* this is very bad! */
 
-Make and Run
-============
-Makefile will compile a shared library libbitpacker.so.
-Makefile will link the libbitpacker.so into sample program, bptest.
-To run in place, set LD_LIBRARY_PATH=$PWD
-
-$ make
-$ export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
-$ ./bptest "string to pack"
-
-bptest will also output a file called test.pack which will hold bitpacked
-output.
-
-To remove compiled files
-========================
-$ make clean
-
 Peter Hyman
 January 2022
+Updated November 2022
 pete@peterhyman.com
 
